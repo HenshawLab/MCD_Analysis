@@ -27,7 +27,7 @@ if RUN_PARTICLELOCATION == true
                 ImgDir = [MainDir biostr '/' repstr '/' concstr '/'];
                 if strcmp(filenaming,'custom')
                     for i = 1:NLoop
-                        imglist(i).name = ['Position ' num2str(6) '_t' sprintf('%02d',i-1) '_ch00' imgextension];
+                        imglist(i).name = ['Position ' num2str(ip) '_t' sprintf('%02d',i-1) '_ch00' imgextension];
                     end
                 else
                     cd(ImgDir); imglist = dir(imgextension); cd(WorkingDir);
