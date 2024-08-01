@@ -29,7 +29,7 @@ addpath('peripherals');
 MainDir = 'D:/WakeTest/'; % Important to end with the "/"
 ExpName = 'ExperimentName'; % Name you want on the plot titles/folder name
 WorkingDir = pwd; % Working Directory, where we are currently
-imgextension = '.tif'; % Image format (.tiff, .tif, .jpg etc.)
+imgextension = '*.tif'; % Image format (.tiff, .tif, .jpg etc.)
 
 BioReps = [1]; % Bio replicates. For example, if you did 4 replicates but only want the first, second, and fourth, set this to be [1,2,4]
 Reps = [1,2]; % Technical replicates, same style as BioReps
