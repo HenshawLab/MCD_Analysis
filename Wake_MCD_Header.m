@@ -31,11 +31,11 @@ ExpName = 'ExperimentName'; % Name you want on the plot titles/folder name
 WorkingDir = pwd; % Working Directory, where we are currently
 imgextension = '*.tif'; % Image format (.tiff, .tif, .jpg etc.)
 
-BioReps = [1]; % Bio replicates. For example, if you did 4 replicates but only want the first, second, and fourth, set this to be [1,2,4]
-Reps = [1,2]; % Technical replicates, same style as BioReps
+BioReps = [1,2,3]; % Bio replicates. For example, if you did 4 replicates but only want the first, second, and fourth, set this to be [1,2,4]
+Reps = [1,2,3]; % Technical replicates, same style as BioReps
 NBio = length(BioReps); NRep = length(Reps);
 
-NLoop = 75; % Number of cycles each channel is imaged for
+NLoop = 103; % Number of cycles each channel is imaged for
 NPos = 6; % Number of channels (positions) used
 concentrations = [200,49,3.6,0.12,0.0012,0];
 
@@ -44,7 +44,7 @@ chem_location = 'bottom'; % Choices: 'bottom' , 'top'. Location of chemotstimula
 
 % Choices for preprocessing/analysis - so you don't have to run the whole thing for a
 % specific section. Default: true
-RUN_BACKGROUND = true;
+RUN_BACKGROUND = false;
 RUN_CROPPING = false;
 RUN_PRETRACKPARAMETERS = false;
 
@@ -56,7 +56,7 @@ RUN_ANALYSIS = true;
 particle_type = 'dark';
 
 % Image naming parameters
-filenaming = 'custom'; % 'custom' for images as provided, 'default' if enough leading zeros to put files in correct order
+filenaming = 'default'; % 'custom' for images as provided, 'default' if enough leading zeros to put files in correct order
 
 % Width of accumulation region (from boundaries, in microns)
 accum_width = 200;
@@ -89,6 +89,7 @@ FigDir = [ExperimentOutDir 'Figures/'];
 PNGDir = [FigDir 'PNGS/']; 
 mkdir(FigDir); mkdir(PNGDir);
 mkdir([FigDir 'Heatmaps/']); mkdir([PNGDir 'Heatmaps']);
+mkdir([FigDir 'Heatmaps/CentreOmitted/']); mkdir([PNGDir 'Heatmaps/CentreOmitted/']);
 BetaFigDir = [OutputMain 'Beta/Figs/'];
 BetaDir = [OutputMain 'Beta/'];
 BetaPNGDir = [OutputMain 'Beta/Figs/PNGS/'];
@@ -98,6 +99,6 @@ mkdir(BetaDir); mkdir(BetaFigDir); mkdir(BetaPNGDir);
 %% Run codes
 
 % Wake_MCD_PreAnalysis;
-% Wake_MCD_Analysis;
-% Wake_MCD_BetaPlotting;
+Wake_MCD_Analysis;
+Wake_MCD_BetaPlotting;
 Wake_MCD_MakeSpreadsheets;
