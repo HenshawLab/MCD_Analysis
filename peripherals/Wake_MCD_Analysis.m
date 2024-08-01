@@ -127,6 +127,7 @@ if RUN_ANALYSIS == true
                 end
 
                 rhomap = zeros(length(BinEdges)-1,NLoop,NPos);
+                rhomap_omitted = rhomap;
 
                 % Counting and heatmaps
                 for it = 1:NLoop
@@ -142,8 +143,15 @@ if RUN_ANALYSIS == true
 
                     h = histogram(y,BinEdges,'normalization','pdf');
                     rhomap(:,it,ip) = h.Values';
+
+                    % Recalculate with the centre omitted
+                    exclusion_bounds = (Channel_Width/2) + [-Exclusion, Exclusion];
+                    y_omitted = y;
+                    y_omitted(y >= exclusion_bounds(1) && y <= exclusion_bounds(2)) = [];
+                    h2 = histogram(y_omitted,BinEdges,'normalization','pdf');
+                    rhomap_omitted(:,it,ip) = h2.Values';
 %                     
-%                     % For saving purposes
+%                   % For saving purposes
                     Nupper(it,ip,iR,iB) = nu(it);
                     Nlower(it,ip,iR,iB) = nl(it);
 
@@ -182,6 +190,23 @@ if RUN_ANALYSIS == true
                 saveas(gcf,[PNGDir 'Heatmaps/' ExpName '_' biostr '_' repstr '_Channel-' num2str(ip) '.png'])
                 close(gcf);
 
+                % Heatmap with centre omitted
+                fh = figure;
+                set(fh,'color','white');
+                imagesc(time./60,centres,squeeze(rhomap_omitted(:,:,ip)));
+                colormap('hot');
+                set(gca,'YDir','reverse');
+                ylabel('Position y \mum','Interpreter','LaTex');
+                xlabel('Time t min','Interpreter','LaTex');
+                set(gca,'fontsize',10);
+                set(gca,'XLim',[min(time./60),max(time./60)],'YLim',[min(centres),max(centres)]);
+                title([biostr ' ' repstr ' ' 'Channel ' num2str(ip)]);
+                colorbar;
+                saveas(gcf,[FigDir 'Heatmaps/CentreOmitted/' ExpName '_' biostr '_' repstr '_Channel-' num2str(ip) '_CentreOmitted.fig'])
+                saveas(gcf,[PNGDir 'Heatmaps/CentreOmitted/' ExpName '_' biostr '_' repstr '_Channel-' num2str(ip) '_CentreOmitted.png'])
+                close(gcf);
+                
+
             end % End of looping over positions
 
         end % End of technical replicates (NRep)
@@ -190,11 +215,11 @@ if RUN_ANALYSIS == true
 
     save([ExperimentOutDir ExpName '_beta_analysis.mat'],...
         'accum_width','beta_all','time_all','Nupper','Nlower',...
-        'beta_output');
+        'beta_output','rhomap','rhomap_omitted');
 
     save([BetaDir ExpName '_beta_analysis.mat'],...
         'accum_width','beta_all','time_all','Nupper','Nlower',...
-        'beta_output');
+        'beta_output','rhomap','rhomap_omitted');
 
 end % End of analysis loop
 
